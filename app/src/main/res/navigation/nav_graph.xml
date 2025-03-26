@@ -104,7 +104,7 @@
         android:id="@+id/recipeDetailFragment"
         android:name="edu.ismt.prabin.mealmate.ui.recipe.RecipeDetailFragment"
         android:label="Recipe Details"
-        tools:layout="@layout/fragment_recipe_detail">
+        tools:layout="@layout/fragment_recipe_details">
         <argument
             android:name="recipeId"
             app:argType="string" />
