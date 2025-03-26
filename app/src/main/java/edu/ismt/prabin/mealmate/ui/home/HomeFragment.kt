@@ -142,14 +142,18 @@ class HomeFragment : Fragment() {
     }
     
     private fun loadRecipes() {
+        if (!isAdded) return  // Don't proceed if fragment is not added to activity
+        
         swipeRefreshLayout.isRefreshing = true
         
+        // Use lifecycleScope but check if view still exists before accessing it
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                // Get current user ID
                 val currentUserId = edu.ismt.prabin.mealmate.data.repository.SupabaseClient.getCurrentUserId()
                 if (currentUserId == null) {
-                    Snackbar.make(requireView(), "Not logged in", Snackbar.LENGTH_SHORT).show()
+                    view?.let { safeView ->
+                        Snackbar.make(safeView, "Not logged in", Snackbar.LENGTH_SHORT).show()
+                    }
                     swipeRefreshLayout.isRefreshing = false
                     return@launch
                 }
@@ -163,78 +167,73 @@ class HomeFragment : Fragment() {
                 // Get user recipes for recent section
                 val userRecipesResult = RecipeRepository.getRecipes(currentUserId)
                 
+                // Ensure view still exists before proceeding
+                if (!isAdded || view == null) {
+                    return@launch
+                }
+                
                 allRecipesResult.fold(
                     onSuccess = { allRecipes ->
-                        // Log received recipes for debugging
-                        Log.d("HomeFragment", "All recipes: ${allRecipes.size}, Current meal type: $currentMealType")
-                        Log.d("HomeFragment", "Recipes by food type: " + 
-                               allRecipes.groupBy { it.foodType }
-                                          .mapValues { it.value.size }
-                                          .toString())
+                        if (!isAdded) return@fold // Check again before processing
                         
-                        // Filter recipes for suggested section with improved logic
                         // First, prioritize current meal type recipes
                         val currentMealRecipes = allRecipes
                             .filter { it.foodType.equals(currentMealType, ignoreCase = true) }
                         
-                        // Then, if we need more recipes to fill the quota of 5, add other meal types
                         val suggestedRecipes = if (currentMealRecipes.size >= 5) {
-                            // If we have enough current meal type recipes, just shuffle and take 5
                             currentMealRecipes.shuffled().take(5)
                         } else {
-                            // If we don't have enough, first take all current meal type recipes
                             val result = currentMealRecipes.toMutableList()
-                            
-                            // Then add other meal types to fill the remaining slots
                             val otherRecipes = allRecipes
                                 .filter { !it.foodType.equals(currentMealType, ignoreCase = true) }
                                 .shuffled()
                                 .take(5 - result.size)
-                            
                             result.addAll(otherRecipes)
-                            result.shuffled() // Shuffle the combined list
+                            result.shuffled()
                         }
                         
-                        // Log filtered recipes
-                        Log.d("HomeFragment", "Suggested recipes count: ${suggestedRecipes.size}")
-                        Log.d("HomeFragment", "Meal types in suggested: ${suggestedRecipes.map { it.foodType }}")
-                        
-                        // Update suggested recipes adapter
-                        suggestedAdapter.updateRecipes(suggestedRecipes)
-                        
-                        // Restart auto-scrolling when new data is loaded
-                        restartAutoScrolling()
+                        // Update UI safely
+                        view?.let { safeView ->
+                            suggestedAdapter.updateRecipes(suggestedRecipes)
+                            restartAutoScrolling()
+                        }
                     },
                     onFailure = { error ->
-                        Snackbar.make(requireView(), 
-                            "Failed to load suggested recipes: ${error.message}", 
-                            Snackbar.LENGTH_SHORT).show()
+                        view?.let { safeView ->
+                            Snackbar.make(safeView, 
+                                "Failed to load suggested recipes: ${error.message}", 
+                                Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                 )
                 
-                // Handle user's recent recipes separately
+                // Handle user's recent recipes
                 userRecipesResult.fold(
                     onSuccess = { userRecipes ->
-                        // Get recent recipes from user (sorted by creation date)
+                        if (!isAdded) return@fold
                         val recentRecipes = userRecipes
                             .sortedByDescending { it.createdAt }
                             .take(6)
-                        
-                        // Update recent recipes adapter
                         recentAdapter.updateRecipes(recentRecipes)
                     },
                     onFailure = { error ->
-                        Snackbar.make(requireView(), 
-                            "Failed to load recent recipes: ${error.message}", 
-                            Snackbar.LENGTH_SHORT).show()
+                        view?.let { safeView ->
+                            Snackbar.make(safeView,
+                                "Failed to load recent recipes: ${error.message}",
+                                Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                 )
-                
-                // Finish refreshing
-                swipeRefreshLayout.isRefreshing = false
             } catch (e: Exception) {
-                Snackbar.make(requireView(), "Error: ${e.message}", Snackbar.LENGTH_SHORT).show()
-                swipeRefreshLayout.isRefreshing = false
+                if (isAdded) {
+                    view?.let { safeView ->
+                        Snackbar.make(safeView, "Error: ${e.message}", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            } finally {
+                if (isAdded) {
+                    swipeRefreshLayout.isRefreshing = false
+                }
             }
         }
     }
