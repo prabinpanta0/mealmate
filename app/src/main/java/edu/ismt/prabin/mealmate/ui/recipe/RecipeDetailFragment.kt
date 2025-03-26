@@ -86,14 +86,14 @@ class RecipeDetailFragment : Fragment() {
         shakeDetector.setOnShakeListener(object : ShakeDetector.OnShakeListener {
             override fun onShake() {
                 viewModel.currentRecipe.value?.let { recipe ->
-                    // Launch share sheet
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        putExtra(Intent.EXTRA_SUBJECT, "Recipe: ${recipe.title}")
-                        putExtra(Intent.EXTRA_TEXT, viewModel.formatRecipeForSMS(recipe))
-                    }
-                    val chooserIntent = Intent.createChooser(shareIntent, getString(R.string.share_recipe))
-                    startActivity(chooserIntent)
+                    // Launch contact picker when phone is shaken
+                    launchContactPicker()
+                    // Show a hint about the shake feature
+                    Snackbar.make(
+                        requireView(),
+                        getString(R.string.shake_to_share_recipe),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         })
@@ -411,8 +411,12 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun updateMenuItemsVisibility() {
         binding.toolbar.menu?.let { menu ->
-            menu.findItem(R.id.action_edit_recipe)?.isVisible = isRecipeCreator
-            menu.findItem(R.id.action_delete_recipe)?.isVisible = isRecipeCreator
+            menu.findItem(R.id.action_overflow)?.isVisible = true
+            // Hide edit/delete menu items based on creator status
+            menu.findItem(R.id.action_overflow)?.subMenu?.let { subMenu ->
+                subMenu.findItem(R.id.action_edit_recipe)?.isVisible = isRecipeCreator
+                subMenu.findItem(R.id.action_delete_recipe)?.isVisible = isRecipeCreator
+            }
         }
     }
     
@@ -482,15 +486,15 @@ class RecipeDetailFragment : Fragment() {
      */
     private fun shareViaEmail() {
         viewModel.currentRecipe.value?.let { recipe ->
-            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:") // only email apps should handle this
+            val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822"  // Use email mime type
                 putExtra(Intent.EXTRA_SUBJECT, "Recipe: ${recipe.title}")
                 putExtra(Intent.EXTRA_TEXT, viewModel.formatRecipeForSMS(recipe))
             }
             
-            if (emailIntent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(emailIntent)
-            } else {
+            try {
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.share_via_email)))
+            } catch (e: Exception) {
                 Snackbar.make(requireView(), getString(R.string.no_email_app_found), Snackbar.LENGTH_SHORT).show()
             }
         }

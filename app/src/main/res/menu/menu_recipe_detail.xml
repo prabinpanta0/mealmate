@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share"
         android:title="@string/share"
-        app:iconTint="@android:color/white"
         app:showAsAction="ifRoom">
-        <menu>
+        <menu
+            android:background="?attr/colorSurface">
             <item
                 android:id="@+id/action_share_sms"
                 android:icon="@drawable/ic_sms"
-                app:iconTint="@android:color/black"
                 android:title="@string/share_via_sms" />
             <item
                 android:id="@+id/action_share_email"
                 android:icon="@drawable/ic_mail"
-                app:iconTint="@android:color/black"
                 android:title="@string/share_via_email" />
             <item
                 android:id="@+id/action_share_social"
-                android:icon="@drawable/ic_share"
-                app:iconTint="@android:color/black"
                 android:title="@string/share_via_other_apps" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_add_to_shopping_list"
         android:icon="@drawable/ic_grocery"
-        app:iconTint="@android:color/white"
         android:title="@string/add_to_shopping_list"
         app:showAsAction="ifRoom" />
-
     <item
-        android:id="@+id/action_edit_recipe"
-        android:icon="@drawable/ic_edit"
-        android:title="@string/edit_recipe"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_delete_recipe"
-        android:icon="@drawable/ic_delete"
-        android:title="@string/delete_recipe"
-        app:showAsAction="never" />
+        android:id="@+id/action_overflow"
+        android:icon="@drawable/ic_more_vert"
+        android:title=""
+        app:showAsAction="always">
+        <menu
+            android:background="?attr/colorSurface"
+            >
+            <item
+                android:id="@+id/action_edit_recipe"
+                android:icon="@drawable/ic_edit"
+                android:title="@string/edit_recipe" />
+            <item
+                android:id="@+id/action_delete_recipe"
+                android:icon="@drawable/ic_delete"
+                android:title="@string/delete_recipe" />
+        </menu>
+    </item>
     
 </menu>
