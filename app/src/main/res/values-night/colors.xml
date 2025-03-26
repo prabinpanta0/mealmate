@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand color - Warm Rustic Red -->
+    <color name="orange_primary">#FF7D6A</color> <!-- Lighter version for dark theme -->
+    <color name="primary">#FF7D6A</color>
+    <color name="primary_dark">#E94F37</color>
+    <color name="primary_light">#FFADA0</color>
+    <color name="primary_container">#5D1B0F</color>
+    <color name="on_primary_container">#FFDBD5</color>
+
+    <!-- Secondary brand color - Rich Olive Green -->
+    <color name="secondary">#82956B</color> <!-- Lighter version for dark theme -->
+    <color name="secondary_dark">#5E7340</color>
+    <color name="secondary_light">#A6BA8E</color>
+    <color name="secondary_container">#2B351B</color>
+    <color name="on_secondary_container">#DFE6CD</color>
+
+    <!-- Tertiary brand color - Warm Butterscotch -->
+    <color name="tertiary">#FFBD8A</color> <!-- Lighter version for dark theme -->
+    <color name="tertiary_container">#633C1B</color>
+    <color name="on_tertiary">#402C1B</color>
+    <color name="on_tertiary_container">#FFE2C7</color>
+
+    <!-- Material 3 system colors -->
+    <color name="surface">#1A1918</color> <!-- Warmer dark shade -->
+    <color name="surface_dim">#121110</color>
+    <color name="surface_bright">#3A3836</color>
+    <color name="surface_container_lowest">#0F0F0E</color>
+    <color name="surface_container_low">#1A1918</color>
+    <color name="surface_container">#201F1E</color>
+    <color name="surface_container_high">#2B2927</color>
+    <color name="surface_container_highest">#363330</color>
+
+    <!-- Neutral Colors -->
+    <color name="neutral_50">#212529</color>
+    <color name="neutral_100">#343A40</color>
+    <color name="neutral_200">#495057</color>
+    <color name="neutral_300">#6C757D</color>
+    <color name="neutral_400">#ADB5BD</color>
+    <color name="neutral_500">#CED4DA</color>
+    <color name="neutral_600">#DEE2E6</color>
+    <color name="neutral_700">#E9ECEF</color>
+    <color name="neutral_800">#F1F3F5</color>
+    <color name="neutral_900">#F8F9FA</color>
+
+    <!-- On colors -->
+    <color name="on_primary">#000000</color>
+    <color name="on_secondary">#000000</color>
+    <color name="on_surface">#ECE6E2</color>
+    <color name="on_surface_variant">#CAC4BD</color>
+    <color name="on_background">#ECE6E2</color>
+
+    <!-- Accent Colors -->
+    <color name="accent_success">#5BC992</color> <!-- Lighter for dark theme -->
+    <color name="accent_warning">#FFD97E</color> <!-- Lighter for dark theme -->
+    <color name="accent_danger">#F2B8B5</color>
+    <color name="accent_info">#7289FD</color> <!-- Lighter for dark theme -->
+
+    <!-- Other system colors -->
+    <color name="outline">#938F99</color>
+    <color name="outline_variant">#49454F</color>
+    <color name="error">#F2B8B5</color>
+    <color name="error_container">#8C1D18</color>
+    <color name="on_error">#601410</color>
+    <color name="on_error_container">#F9DEDC</color>
+    <color name="background">#1A1918</color> <!-- Warmer dark shade -->
+    <color name="scrim">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- State layer opacities -->
+    <color name="state_layer_pressed">#29FFFFFF</color>
+    <color name="state_layer_focused">#3DFFFFFF</color>
+    <color name="state_layer_hovered">#14FFFFFF</color>
+    <color name="state_layer_dragged">#29FFFFFF</color>
+
+    <color name="surface_variant">#49454F</color>
+    <color name="selection_highlight">#1AFF7D6A</color>
+</resources>

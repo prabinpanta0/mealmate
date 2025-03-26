@@ -1,0 +1,188 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    id 'org.jetbrains.kotlin.plugin.compose'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+// Load properties from local.properties
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+android {
+    namespace 'edu.ismt.prabin.mealmate'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "edu.ismt.prabin.mealmate"
+        minSdk 28
+        targetSdk 35
+        versionCode 1
+        versionName "1.0.11"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Add Supabase credentials as BuildConfig fields
+        buildConfigField "String", "SUPABASE_URL", "\"${localProperties.getProperty('supabase.url', '')}\""
+        buildConfigField "String", "SUPABASE_KEY", "\"${localProperties.getProperty('supabase.key', '')}\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        resources {
+            pickFirsts.add('META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler')
+            pickFirsts.add('META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+
+    kapt {
+        correctErrorTypes true
+        includeCompileClasspath = true
+        arguments {
+            arg("kapt.verbose", "true")
+        }
+    }
+
+    // Enable View Binding and Compose
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.4"
+    }
+
+    testOptions {
+        unitTests {
+            all {
+                useJUnitPlatform()
+                jvmArgs '-Dfile.encoding=UTF-8'
+                // Exclude the problematic files from test runtime
+                systemProperties = [
+                    'kotlinx.coroutines.debug': 'off'
+                ]
+            }
+        }
+    }
+}
+
+dependencies {
+    // AndroidX Core Libraries
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.activity
+    implementation libs.androidx.constraintlayout
+
+    // Supabase Dependencies
+    implementation platform("io.github.jan-tennert.supabase:bom:3.1.2")
+    implementation libs.postgrest.kt
+    implementation libs.auth.kt
+    implementation libs.realtime.kt
+    implementation libs.storage.kt
+    implementation libs.ktor.client.android
+    implementation libs.kotlinx.datetime
+
+    // Glide for image loading
+    implementation libs.glide
+    annotationProcessor libs.compiler
+    kapt libs.compiler
+
+    // Jetpack Compose - Use BOM for consistent versions
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.activity.compose
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.ui:ui-graphics"
+    implementation "androidx.compose.ui:ui-tooling-preview"
+    implementation "androidx.compose.material3:material3"
+    implementation "androidx.compose.foundation:foundation"
+    implementation "androidx.compose.foundation:foundation-layout"
+    implementation "androidx.compose.runtime:runtime"
+    implementation "androidx.compose.material:material"
+    debugImplementation "androidx.compose.ui:ui-tooling"
+
+    // Add this specific version for foundation-layout
+    implementation "androidx.compose.foundation:foundation-layout:1.7.8"
+
+    // Navigation Components
+    implementation libs.androidx.navigation.fragment.ktx.v277
+    implementation libs.androidx.navigation.ui.ktx.v277
+
+    // Lifecycle Components
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
+
+    // Coroutines
+    def coroutinesVersion = "1.7.3"  // Using a stable version known to work
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion") {
+        // Exclude the Android-specific implementation to avoid conflicts
+        exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-android'
+    }
+
+    // Material Components
+    implementation libs.androidx.constraintlayout
+    implementation libs.material
+
+
+    // MotionLayout (part of ConstraintLayout)
+    implementation libs.androidx.constraintlayout
+
+    // Splash Screen API
+    implementation libs.androidx.core.splashscreen
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+
+    // Kotlin Serialization
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0"
+
+    // SwipeRefreshLayout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // Testing Dependencies with aligned versions
+    def androidTestVersion = "1.5.0"
+    def espressoVersion = "3.5.1"
+
+    // Core testing dependencies
+    androidTestImplementation "androidx.test:core:$androidTestVersion"
+    androidTestImplementation "androidx.test:runner:$androidTestVersion"
+    androidTestImplementation "androidx.test:rules:$androidTestVersion"
+    androidTestImplementation "androidx.test:monitor:1.6.0"
+
+    // AndroidX Test dependencies
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.ext:junit-ktx:1.1.5"
+
+    // Espresso dependencies
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+    debugImplementation "androidx.test:core:$androidTestVersion"
+
+    // Fragment testing
+    debugImplementation "androidx.fragment:fragment-testing:1.6.2"
+    debugImplementation "androidx.fragment:fragment-testing:1.6.2"
+}

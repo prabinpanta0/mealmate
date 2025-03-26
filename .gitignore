@@ -1,0 +1,67 @@
+# Android Studio / IntelliJ IDEA
+*.iml
+.idea/
+.idea/.name
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/misc.xml
+.idea/gradle.xml
+.idea/dictionaries
+.idea/encodings.xml
+.idea/vcs.xml
+
+# Gradle files
+.gradle/
+build/
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Local configuration files
+local.properties
+/local.properties
+
+# Log/OS Files
+*.log
+.DS_Store
+
+# Android Studio captures folder
+/captures
+
+# VS Code
+.vscode/
+.project
+.classpath
+.settings/
+
+# Kotlin
+.kotlin/
+
+# Generated files
+bin/
+gen/
+out/
+
+# Proguard files
+proguard/
+
+# Android Profiling
+*.hprof
+
+# External native build folder
+.externalNativeBuild
+.cxx
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json

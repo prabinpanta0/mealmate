@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+    
+    <item
+        android:id="@+id/action_select_all"
+        android:icon="@drawable/ic_select_all"
+        android:title="Select All"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_mark_purchased"
+        android:icon="@drawable/ic_shopping_cart"
+        android:iconTint="?attr/colorOnSurface"
+        android:title="@string/mark_as_purchased"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_delete_selected"
+        android:icon="@drawable/ic_delete"
+        android:title="Delete Selected"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:title="Share"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_cancel_selection"
+        android:icon="@drawable/ic_close"
+        android:title="Cancel Selection"
+        app:showAsAction="never" />
+    
+</menu>

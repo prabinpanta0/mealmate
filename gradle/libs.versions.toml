@@ -1,0 +1,77 @@
+[versions]
+#noinspection AndroidGradlePluginVersion
+agp = "8.10.0-alpha08"
+compiler = "4.16.0"
+composeBom = "2025.02.00"
+coreSplashscreen = "1.0.1"
+foundation = "1.7.8"
+glide = "4.16.0"
+kotlin = "2.0.21"
+coreKtx = "1.15.0"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+kotlinxCoroutinesAndroid = "1.10.1"
+kotlinxDatetime = "0.6.2"
+ktorClientAndroid = "3.1.1"
+lifecycleViewmodelKtx = "2.8.7"
+material = "1.12.0"
+activity = "1.10.1"
+constraintlayout = "2.2.1"
+materialVersion = "1.7.8"
+navigationFragmentKtx = "2.8.8"
+navigationFragmentKtxVersion = "2.8.8"
+navigationUiKtx = "2.8.8"
+navigationUiKtxVersion = "2.8.8"
+runtime = "1.7.8"
+supabaseVersion = "3.1.2"
+ui = "1.7.8"
+uiTooling = "1.7.8"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+#noinspection SimilarGradleDependency
+androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+#noinspection SimilarGradleDependency
+androidx-navigation-fragment-ktx-v277 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
+#noinspection SimilarGradleDependency
+androidx-navigation-ui-ktx-v277 = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtxVersion" }
+androidx-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "runtime" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiTooling" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt", version = "3.1.2" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+#noinspection SimilarGradleDependency
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+#noinspection SimilarGradleDependency
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabaseVersion" }
+realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supabaseVersion" }
+storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supabaseVersion" }
+ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+

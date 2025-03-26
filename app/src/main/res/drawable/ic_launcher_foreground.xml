@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow layer -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#40000000" />
+            <size
+                android:width="128dp"
+                android:height="128dp" />
+            <padding android:bottom="4dp" android:right="4dp" />
+        </shape>
+    </item>
+    
+    <!-- Main background with gradient -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="66dp"
+                android:startColor="@color/primary"
+                android:endColor="#D9000000"
+                android:centerColor="@color/primary" />
+            <size
+                android:width="120dp"
+                android:height="120dp" />
+        </shape>
+    </item>
+    
+    <!-- Inner circle highlight -->
+    <item
+        android:width="90dp"
+        android:height="90dp"
+        android:gravity="center">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="45dp"
+                android:startColor="#33FFFFFF"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+    
+    <!-- Icon with slight elevation effect -->
+    <item
+        android:width="64dp"
+        android:height="64dp"
+        android:drawable="@drawable/ic_restaurant"
+        android:gravity="center" />
+</layer-list>

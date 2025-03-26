@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation bar height for devices with gesture navigation -->
+    <dimen name="navigation_bar_height">56dp</dimen>
+    
+    <!-- Grid spacing for different screen sizes -->
+    <dimen name="grid_spacing">8dp</dimen>
+    
+    <!-- Grid spacing for different screen sizes -->
+    <dimen name="grid_card_margin">4dp</dimen>
+    
+    <!-- Card dimensions -->
+    <dimen name="min_card_width">180dp</dimen>
+    <dimen name="max_card_width">360dp</dimen>
+</resources>
