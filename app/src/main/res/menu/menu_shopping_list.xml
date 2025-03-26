@@ -17,8 +17,7 @@
     
     <item
         android:id="@+id/action_mark_purchased"
-        android:icon="@drawable/ic_shopping_cart"
-        android:iconTint="?attr/colorOnSurface"
+        android:icon="@drawable/ic_grocery"
         android:title="@string/mark_as_purchased"
         app:showAsAction="ifRoom" />
 
