@@ -317,13 +317,11 @@ class CreateRecipeFragment : Fragment() {
                     id = UUID.randomUUID().toString(),
                     recipeId = currentRecipe?.id ?: "",
                     name = name,
-                    category = foodType,
-
+                    category = foodType
                 )
             )
         }
         
-        // Create or update recipe
         val currentUserId = SupabaseClient.getCurrentUserId() ?: ""
         val recipe = Recipe(
             id = currentRecipe?.id ?: "",
@@ -343,7 +341,7 @@ class CreateRecipeFragment : Fragment() {
         progressIndicator.visibility = View.VISIBLE
         saveButton.isEnabled = false
         
-        // Save recipe
+        // Save recipe with image if one was selected
         if (isEditMode) {
             viewModel.updateRecipe(recipe, selectedImageUri)
         } else {

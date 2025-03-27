@@ -10,52 +10,95 @@ import edu.ismt.prabin.mealmate.data.model.Recipe
 import edu.ismt.prabin.mealmate.data.repository.RecipeRepository
 import edu.ismt.prabin.mealmate.data.repository.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * ViewModel for handling recipe-related data operations.
  */
 class RecipeViewModel : ViewModel() {
-    
-    // LiveData for recipes list
+
     private val _recipes = MutableLiveData<List<Recipe>>()
     val recipes: LiveData<List<Recipe>> = _recipes
     
-    // LiveData for filtered recipes list
     private val _filteredRecipes = MutableLiveData<List<Recipe>>()
     val filteredRecipes: LiveData<List<Recipe>> = _filteredRecipes
     
-    // LiveData for current recipe
     private val _currentRecipe = MutableLiveData<Recipe?>()
     val currentRecipe: LiveData<Recipe?> = _currentRecipe
     
-    // LiveData for operation status
     private val _operationStatus = MutableLiveData<OperationStatus>()
     val operationStatus: LiveData<OperationStatus> = _operationStatus
     
-    // Search query
     private var searchQuery = ""
-    
-    // Selected category filter
     private var selectedCategory: String? = null
-    
-    // Selected time filter (in minutes)
     private var selectedTime: Int? = null
-    
+
     /**
      * Load recipes for a specific user
      */
     fun loadRecipes(userId: String) {
-        viewModelScope.launch {
-            RecipeRepository.getRecipes(userId).fold(
-                onSuccess = { recipeList ->
-                    _recipes.value = recipeList
-                    applyFilters()
-                },
-                onFailure = { error ->
-                    _operationStatus.value = OperationStatus.Error(error.message ?: "Failed to load recipes")
+        viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
+            try {
+                _operationStatus.value = OperationStatus.Loading
+
+                withContext(Dispatchers.IO) {
+                    RecipeRepository.getRecipes(userId)
+                }.fold(
+                    onSuccess = { recipes ->
+                        _recipes.value = recipes
+                        _filteredRecipes.value = recipes
+                        _operationStatus.value = OperationStatus.Success("Recipes loaded successfully")
+                    },
+                    onFailure = { error ->
+                        _operationStatus.value = OperationStatus.Error(error.message ?: "Failed to load recipes")
+                    }
+                )
+            } catch (e: Exception) {
+                _operationStatus.value = OperationStatus.Error(e.message ?: "Failed to load recipes")
+            }
+        }
+    }
+    
+    /**
+     * Load all recipes (not limited to a specific user)
+     */
+    fun loadAllRecipes() {
+        viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
+            try {
+                _operationStatus.value = OperationStatus.Loading
+                
+                withContext(Dispatchers.IO) {
+                    RecipeRepository.getAllRecipes()
+                }.fold(
+                    onSuccess = { recipes ->
+                        _recipes.value = recipes
+                        _filteredRecipes.value = recipes
+                        _operationStatus.value = OperationStatus.Success("All recipes loaded successfully")
+                    },
+                    onFailure = { error ->
+                        android.util.Log.e("RecipeViewModel", "Failed to load all recipes: ${error.message}")
+                        _operationStatus.value = OperationStatus.Error(error.message ?: "Failed to load recipes")
+                        
+                        // Set empty lists as fallback to prevent null issues
+                        if (_recipes.value == null) {
+                            _recipes.value = emptyList()
+                            _filteredRecipes.value = emptyList()
+                        }
+                    }
+                )
+            } catch (e: Exception) {
+                android.util.Log.e("RecipeViewModel", "Exception loading all recipes: ${e.message}")
+                _operationStatus.value = OperationStatus.Error(e.message ?: "Failed to load recipes")
+                
+                // Set empty lists as fallback
+                if (_recipes.value == null) {
+                    _recipes.value = emptyList()
+                    _filteredRecipes.value = emptyList()
                 }
-            )
+            }
         }
     }
     
@@ -84,20 +127,15 @@ class RecipeViewModel : ViewModel() {
             
             // Apply time filter
             val matchesTime = if (selectedTime != null) {
-                val timeLimit = selectedTime ?: return@filter false
-                when (timeLimit) {
-                    Int.MAX_VALUE -> recipe.prepTime > 60
-                    else -> recipe.prepTime <= timeLimit
-                }
+                recipe.prepTime <= selectedTime!!
             } else {
                 true
             }
             
-            // Recipe must match all applied filters
             matchesQuery && matchesCategory && matchesTime
         }
         
-        _filteredRecipes.value = filtered
+        _filteredRecipes.postValue(filtered)
     }
     
     /**
@@ -138,7 +176,7 @@ class RecipeViewModel : ViewModel() {
      * Load a specific recipe by ID
      */
     fun loadRecipe(recipeId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main + SupervisorJob()) {
             RecipeRepository.getRecipeById(recipeId).fold(
                 onSuccess = { recipe ->
                     _currentRecipe.value = recipe

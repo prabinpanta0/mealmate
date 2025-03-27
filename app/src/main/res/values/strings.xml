@@ -144,4 +144,12 @@
     <string name="edit_shopping_item">Edit Shopping Item</string>
     <string name="mark_as_purchased">Mark as Purchased</string>
     <string name="already_purchased">Already purchased</string>
+
+    <!-- Recipe List Screen -->
+    <string name="my_recipes">My Recipes</string>
+    <string name="all">All</string>
+    <string name="empty_recipes">No recipes found</string>
+    <string name="try_adding_a_recipe">Create your first recipe to get started</string>
+    <string name="not_logged_in">You need to be logged in to view your recipes</string>
+    <string name="error_loading_recipes">Failed to load recipes. Please try again.</string>
 </resources>

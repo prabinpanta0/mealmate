@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import edu.ismt.prabin.mealmate.R
 import edu.ismt.prabin.mealmate.data.model.Recipe
 
@@ -54,6 +55,8 @@ class RecipePagerAdapter(
             if (recipe.imageUrl.isNotEmpty()) {
                 Glide.with(itemView.context)
                     .load(recipe.imageUrl)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .placeholder(R.drawable.placeholder_recipe)
                     .error(R.drawable.placeholder_recipe)
                     .centerCrop()
@@ -69,4 +72,4 @@ class RecipePagerAdapter(
             }
         }
     }
-} 
+}

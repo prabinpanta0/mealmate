@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -116,14 +117,14 @@ class RecipeDetailFragment : Fragment() {
             findNavController().navigateUp()
         }
         
-        // Configure toolbar with menu item click listener - no need to manually inflate the menu
-        // as it will be inflated automatically by the AppCompatActivity
+        // Configure toolbar with menu item click listener
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             handleMenuItemClick(menuItem)
         }
         
-        // Setup ingredients RecyclerView
+        // Setup ingredients RecyclerView with fixed size for better performance
         binding.ingredientsList.apply {
+            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = ingredientsAdapter
         }
@@ -143,7 +144,23 @@ class RecipeDetailFragment : Fragment() {
         // Observe current recipe
         viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
             recipe?.let { 
-                displayRecipe(it)
+                // Ensure we're still attached to the activity
+                if (!isAdded) return@let
+                
+                // Display recipe with retry mechanism if needed
+                try {
+                    displayRecipe(it)
+                } catch (e: Exception) {
+                    // Log error and retry once
+                    android.util.Log.e("RecipeDetail", "Error displaying recipe: ${e.message}")
+                    view.post { 
+                        try {
+                            displayRecipe(it)
+                        } catch (e: Exception) {
+                            android.util.Log.e("RecipeDetail", "Failed retry: ${e.message}")
+                        }
+                    }
+                }
                 
                 // Check if current user is the recipe creator
                 val currentUserId = SupabaseClient.getCurrentUserId()
@@ -239,6 +256,8 @@ class RecipeDetailFragment : Fragment() {
                     
                     Glide.with(requireContext())
                         .load(recipe.imageUrl)
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .placeholder(R.drawable.placeholder_recipe)
                         .error(R.drawable.placeholder_recipe)
                         .centerCrop()

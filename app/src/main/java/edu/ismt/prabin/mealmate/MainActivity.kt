@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity() {
             val recyclerViewIds = listOf(
                 R.id.recipe_recycler_view,
                 R.id.recentRecipesRecyclerView,
-                R.id.search_result_recycler_view,
                 R.id.shopping_list_recycler_view
             )
             

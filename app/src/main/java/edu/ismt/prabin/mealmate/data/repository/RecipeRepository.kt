@@ -99,59 +99,83 @@ object RecipeRepository {
      */
     suspend fun getRecipes(userId: String): Result<List<Recipe>> = withContext(Dispatchers.IO) {
         try {
-            // Get recipes for the user
+            // Get recipes and ingredients in a single query using foreign references
             val recipes = SupabaseClient.supabase.postgrest[RECIPES_TABLE]
-                .select() {
-                    filter {
-                        eq("user_id", userId)
-                    }
+                .select {
+                    filter { eq("user_id", userId) }
                 }
                 .decodeList<Recipe>()
-            
-            // For each recipe, get its ingredients
-            val recipesWithIngredients = recipes.map { recipe ->
-                val ingredients = SupabaseClient.supabase.postgrest[INGREDIENTS_TABLE]
-                    .select() {
-                        filter {
-                            eq("recipe_id", recipe.id)
+
+            // Get all ingredients for these recipes in a single query
+            val recipeIds = recipes.map { it.id }
+            val allIngredients = if (recipeIds.isNotEmpty()) {
+                SupabaseClient.supabase.postgrest[INGREDIENTS_TABLE]
+                    .select {
+                        filter { 
+                            or {
+                                recipeIds.forEach { id ->
+                                    eq("recipe_id", id)
+                                }
+                            }
                         }
                     }
                     .decodeList<Ingredient>()
-                
-                recipe.copy(ingredients = ingredients)
+            } else {
+                emptyList()
             }
-            
+
+            // Group ingredients by recipe ID
+            val ingredientsByRecipeId = allIngredients.groupBy { it.recipeId }
+
+            // Combine recipes with their ingredients
+            val recipesWithIngredients = recipes.map { recipe ->
+                recipe.copy(ingredients = ingredientsByRecipeId[recipe.id] ?: emptyList())
+            }
+
             Result.success(recipesWithIngredients)
         } catch (e: Exception) {
             Log.e(TAG, "Get recipes failed", e)
             Result.failure(e)
         }
     }
-    
+
     /**
      * Get all recipes from all users
      * @return Result containing a list of all recipes on success or Exception on failure
      */
     suspend fun getAllRecipes(): Result<List<Recipe>> = withContext(Dispatchers.IO) {
         try {
-            // Get all recipes
+            // Get all recipes in a single query
             val recipes = SupabaseClient.supabase.postgrest[RECIPES_TABLE]
                 .select()
                 .decodeList<Recipe>()
-            
-            // For each recipe, get its ingredients
-            val recipesWithIngredients = recipes.map { recipe ->
-                val ingredients = SupabaseClient.supabase.postgrest[INGREDIENTS_TABLE]
-                    .select() {
+
+            // Get all ingredients in a single query
+            val recipeIds = recipes.map { it.id }
+            val allIngredients = if (recipeIds.isNotEmpty()) {
+                SupabaseClient.supabase.postgrest[INGREDIENTS_TABLE]
+                    .select {
                         filter {
-                            eq("recipe_id", recipe.id)
+                            or {
+                                recipeIds.forEach { id ->
+                                    eq("recipe_id", id)
+                                }
+                            }
                         }
                     }
                     .decodeList<Ingredient>()
-                
-                recipe.copy(ingredients = ingredients)
+            } else {
+                emptyList()
             }
-            
+
+            // Group ingredients by recipe ID
+            val ingredientsByRecipeId = allIngredients.groupBy { it.recipeId }
+
+            // Combine recipes with their ingredients
+            val recipesWithIngredients = recipes.map { recipe ->
+                recipe.copy(ingredients = ingredientsByRecipeId[recipe.id] ?: emptyList())
+            }
+
             Result.success(recipesWithIngredients)
         } catch (e: Exception) {
             Log.e(TAG, "Get all recipes failed", e)
