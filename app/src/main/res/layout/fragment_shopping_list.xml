@@ -51,7 +51,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="Your shopping list is empty"
+                android:text="@string/your_shopping_list_is_empty"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:visibility="gone"
                 tools:visibility="visible" />

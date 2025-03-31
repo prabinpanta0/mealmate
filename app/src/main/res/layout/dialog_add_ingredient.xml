@@ -38,6 +38,7 @@
 
         <AutoCompleteTextView
             android:id="@+id/category_input"
+            android:text="@string/catagory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none" />

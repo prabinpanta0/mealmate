@@ -152,4 +152,8 @@
     <string name="try_adding_a_recipe">Create your first recipe to get started</string>
     <string name="not_logged_in">You need to be logged in to view your recipes</string>
     <string name="error_loading_recipes">Failed to load recipes. Please try again.</string>
+    <string name="your_shopping_list_is_empty">Your shopping list is empty</string>
+    <string name="mealmate_logo">MealMate Logo</string>
+    <string name="mealmate">MealMate</string>
+    <string name="catagory">Catagory</string>
 </resources>
